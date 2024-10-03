@@ -17,19 +17,42 @@ planetasRoutes.get("/", (req, res) => {
     return res.status(200).send(planetas)
 })
 
-//Rota para criar um novo filme
+//Rota para cadastrar um novo planeta
 planetasRoutes.post("/", (req, res) => {
-    const { titulo, genero, emCartaz } = req.body;
+    const {
+        nome,
+        temperatura,
+        agua,
+        atm
+    } = req.body;
 
-    const novoFilme = {
-        id: Number(Math.floor(Math.random() * 99) + 1),
-        titulo,
-        genero,
-        emCartaz,
+    if (!nome || !temperatura || !agua) {
+        return res.status(400).send({
+            message: "Os campos nome, temperatura e agua são obrigatórios!"
+        })
     }
 
-    planetas.push(novoFilme);
-    return res.status(201).send(planetas)
+    //Validação de existência de água.
+
+    if (agua != "sim" && agua != "não") {
+        return res.status(400).send({
+            message: "O campo agua deve ser 'sim' ou 'não'!"
+        })
+    }
+
+    const novoPlaneta = {
+        id: Number(Math.floor(Math.random() * 999999) + 1),
+        nome,
+        temperatura,
+        agua,
+        atm
+    }
+
+    planetas.push(novoPlaneta);
+    return res.status(201).send({
+        message: "Planeta cadastrado!",
+        novoPlaneta,
+    })
 })
 
 // Rota para buscar um elemento específico do array planetas
